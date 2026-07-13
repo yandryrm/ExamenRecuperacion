@@ -1,0 +1,55 @@
+base de datos
+
+
+CREATE TABLE libros (
+    id_libro SERIAL PRIMARY KEY,
+    titulo VARCHAR(100) NOT NULL,
+    autor VARCHAR(100) NOT NULL,
+    editorial VARCHAR(100) NOT NULL,
+    anio_publicacion INT,
+    cantidad INT NOT NULL
+);
+
+
+CREATE TABLE prestamos (
+    id_prestamo SERIAL PRIMARY KEY,
+    id_libro INT NOT NULL,
+    nombre_estudiante VARCHAR(100) NOT NULL,
+    curso VARCHAR(50) NOT NULL,
+    fecha_prestamo DATE NOT NULL,
+    fecha_devolucion DATE NOT NULL,
+
+    CONSTRAINT fk_libro
+        FOREIGN KEY (id_libro)
+        REFERENCES libros(id_libro)
+);
+
+INSERT INTO libros (titulo, autor, editorial, anio_publicacion, cantidad)
+VALUES
+('Cien años de soledad', 'Gabriel Garcia Marquez', 'Sudamericana', 1967, 1),
+('El Principito', 'Antoine de Saint-Exupery', 'Salamandra', 1943, 2),
+('1984', 'George Orwell', 'Debolsillo', 1949, 3);
+
+INSERT INTO prestamos
+(id_libro, nombre_estudiante, curso, fecha_prestamo, fecha_devolucion)
+VALUES
+(1, 'Juan Perez', '2do Bachillerato', '2026-07-01', '2026-07-08'),
+(2, 'Maria Lopez', '1ro Bachillerato', '2026-07-02', '2026-07-09'),
+(3, 'Carlos Sanchez', '3ro Bachillerato', '2026-07-03', '2026-07-10');
+
+
+CREATE TABLE personas (
+    persona SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE,
+    vigente BOOLEAN DEFAULT TRUE,
+    salario DOUBLE PRECISION
+);
+
+INSERT INTO personas
+(persona, nombre, apellido, fecha_nacimiento, vigente, salario)
+VALUES
+(1, 'Juan', 'Pérez', '2000-07-01', TRUE, 120),
+(2, 'Maria', 'Gómez', '2002-07-02', TRUE, 150),
+(3, 'Carlos', 'López', '1998-07-03', FALSE, 110);
