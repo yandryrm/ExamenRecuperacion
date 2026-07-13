@@ -1,22 +1,22 @@
 # ExamenRecuperacion{
 
-from flask import Flask, jsonify, request
-import psycopg2
+    from flask import Flask, jsonify, request
+    import psycopg2
 
-app = Flask(__name__)
+    app = Flask(__name__)
 
-conexion = psycopg2.connect(
+    conexion = psycopg2.connect(
     host="localhost",
     database="bibliteca",   
     user="postgres",        
     password="12345",     
     port="5432"
-)
-print("Conexión exitosa a la base de datos 'biblioteca'")
+    )
+    print("Conexión exitosa a la base de datos 'biblioteca'")
 
 
-@app.route('/', methods=['GET'])
-def obtener_todo():  
+    @app.route('/', methods=['GET'])
+    def obtener_todo():  
     cursor = conexion.cursor()
     
     cursor.execute(
@@ -63,8 +63,8 @@ def obtener_todo():
 
 
 
-@app.route('/prestamos', methods=['GET'])
-def obtener_prestamos():  
+    @app.route('/prestamos', methods=['GET'])
+    def obtener_prestamos():  
     cursor = conexion.cursor()
     cursor.execute(
         """
@@ -88,8 +88,8 @@ def obtener_prestamos():
     return jsonify(prestamos)
 
 
-@app.route('/prestamos/<int:id>', methods=['GET'])
-def obtener_prestamo(id):  
+    @app.route('/prestamos/<int:id>', methods=['GET'])
+    def obtener_prestamo(id):  
     cursor = conexion.cursor()
     cursor.execute(
         """
@@ -114,8 +114,8 @@ def obtener_prestamo(id):
     return jsonify({"error": "Prestamo no encontrado"}), 404
 
 
-@app.route('/prestamos', methods=['POST'])
-def crear_prestamo():  
+    @app.route('/prestamos', methods=['POST'])
+    def crear_prestamo():  
     datos = request.get_json()
     cursor = conexion.cursor()
     cursor.execute(
@@ -138,8 +138,8 @@ def crear_prestamo():
     }), 201
 
 
-@app.route('/prestamos/<int:id>', methods=['PUT'])
-def actualizar_prestamo(id):  
+    @app.route('/prestamos/<int:id>', methods=['PUT'])
+    def actualizar_prestamo(id):  
     datos = request.get_json()
     cursor = conexion.cursor()
     cursor.execute(
@@ -155,8 +155,8 @@ def actualizar_prestamo(id):
     return jsonify({'mensaje': 'Prestamo actualizado correctamente'})
 
 
-@app.route('/prestamos/<int:id>', methods=['DELETE'])
-def eliminar_prestamo(id):  
+    @app.route('/prestamos/<int:id>', methods=['DELETE'])
+    def eliminar_prestamo(id):  
     cursor = conexion.cursor()
     cursor.execute('DELETE FROM prestamos WHERE id_prestamo=%s', (id,))
     conexion.commit()
@@ -165,8 +165,8 @@ def eliminar_prestamo(id):
 
 
 
-@app.route('/libros', methods=['GET'])
-def obtener_libros():  
+    @app.route('/libros', methods=['GET'])
+    def obtener_libros():  
     cursor = conexion.cursor()
     cursor.execute("SELECT id_libro, titulo, autor, editorial, anio_publicacion, cantidad FROM libros")
     datos = cursor.fetchall()
@@ -184,8 +184,8 @@ def obtener_libros():
     return jsonify(libros)
 
 
-@app.route('/libros/<int:id>', methods=['GET'])
-def obtener_libro(id):  
+    @app.route('/libros/<int:id>', methods=['GET'])
+    def obtener_libro(id):  
     cursor = conexion.cursor()
     cursor.execute("SELECT id_libro, titulo, autor, editorial, anio_publicacion, cantidad FROM libros WHERE id_libro=%s", (id,))
     libro = cursor.fetchone()
@@ -204,8 +204,8 @@ def obtener_libro(id):
 
 
 
-@app.route('/libros', methods=['POST'])
-def crear_libro():  
+    @app.route('/libros', methods=['POST'])
+    def crear_libro():  
     datos = request.get_json()
     cursor = conexion.cursor()
     cursor.execute(
@@ -225,8 +225,8 @@ def crear_libro():
     }), 201
 
 
-@app.route('/libros/<int:id>', methods=['PUT'])
-def actualizar_libro(id):  
+    @app.route('/libros/<int:id>', methods=['PUT'])
+    def actualizar_libro(id):  
     datos = request.get_json()
     cursor = conexion.cursor()
     cursor.execute(
@@ -238,16 +238,16 @@ def actualizar_libro(id):
     return jsonify({'mensaje': 'Libro actualizado correctamente'})
 
 
-@app.route('/libros/<int:id>', methods=['DELETE'])
-def eliminar_libro(id):  
+    @app.route('/libros/<int:id>', methods=['DELETE'])
+    def eliminar_libro(id):  
     cursor = conexion.cursor()
     cursor.execute('DELETE FROM libros WHERE id_libro=%s', (id,))
     conexion.commit()
     cursor.close()
     return jsonify({'mensaje': 'Libro eliminado correctamente'})
 
-@app.route('/personas', methods=['GET'])
-def obtener_personas():  
+    @app.route('/personas', methods=['GET'])
+    def obtener_personas():  
     nombre_buscar = request.args.get('nombre')
     cursor = conexion.cursor()
     
@@ -274,8 +274,8 @@ def obtener_personas():
         
     return jsonify(personas)
 
-@app.route('/personas/<int:id>', methods=['GET'])
-def obtener_persona_por_id(id):  
+    @app.route('/personas/<int:id>', methods=['GET'])
+    def obtener_persona_por_id(id):  
     cursor = conexion.cursor()
     cursor.execute("SELECT persona, nombre, apellido, fecha_nacimiento, vigente, salario FROM personas WHERE persona=%s", (id,))
     p = cursor.fetchone()
@@ -292,8 +292,8 @@ def obtener_persona_por_id(id):
     return jsonify({"error": "Persona no encontrada por ID"}), 404
 
 
-@app.route('/personas/buscar/<string:nombre>', methods=['GET'])
-def obtener_personas_por_nombre(nombre):
+    @app.route('/personas/buscar/<string:nombre>', methods=['GET'])
+    def obtener_personas_por_nombre(nombre):
     cursor = conexion.cursor()
     cursor.execute("SELECT persona, nombre, apellido, fecha_nacimiento, vigente, salario FROM personas WHERE nombre LIKE %s", (f"%{nombre}%",))
     datos = cursor.fetchall()
@@ -316,8 +316,8 @@ def obtener_personas_por_nombre(nombre):
     return jsonify(personas)
 
 
-@app.route('/personas', methods=['POST'])
-def crear_persona():  
+    @app.route('/personas', methods=['POST'])
+    def crear_persona():  
     datos = request.get_json()
     cursor = conexion.cursor()
     cursor.execute(
@@ -337,8 +337,8 @@ def crear_persona():
     }), 201
 
 
-@app.route('/personas/<int:id>', methods=['PUT'])
-def actualizar_persona(id):  
+    @app.route('/personas/<int:id>', methods=['PUT'])
+    def actualizar_persona(id):  
     datos = request.get_json()
     cursor = conexion.cursor()
     cursor.execute(
@@ -350,13 +350,13 @@ def actualizar_persona(id):
     return jsonify({'mensaje': 'Persona actualizada correctamente'})
 
 
-@app.route('/personas/<int:id>', methods=['DELETE'])
-def eliminar_persona(id):  
+    @app.route('/personas/<int:id>', methods=['DELETE'])
+    def eliminar_persona(id):  
     cursor = conexion.cursor()
     cursor.execute('UPDATE personas SET vigente=FALSE WHERE persona=%s', (id,))
     conexion.commit()
     cursor.close()
     return jsonify({'mensaje': 'Persona dada de baja (vigente = False) correctamente'})
 
-if __name__ == '__main__':
+    if __name__ == '__main__':
     app.run(debug=True)
